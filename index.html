@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>toobig revenue forecasts</title>
+<style>
+:root{color-scheme:light dark;--bg:#fcfcfb;--panel:#fff;--fg:#1b1d22;--muted:#52514e;--line:#e4e3df;--grid:#efeeea;--zone:#e7e6e1;
+  --s1:#2a78d6;--s2:#eb6834;--good:#0ca30c;--bad:#d03b3b;--link:#1d64b8}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#1a1a19;--panel:#222221;--fg:#f0efec;--muted:#c3c2b7;
+  --line:#383835;--grid:#2b2b29;--zone:#383835;--s1:#3987e5;--s2:#d95926;--link:#86b6ef}}
+:root[data-theme=light]{color-scheme:light}
+:root[data-theme=dark]{color-scheme:dark;--bg:#1a1a19;--panel:#222221;--fg:#f0efec;--muted:#c3c2b7;--line:#383835;--grid:#2b2b29;--zone:#383835;
+  --s1:#3987e5;--s2:#d95926;--link:#86b6ef}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;font-variant-numeric:tabular-nums}
+a{color:var(--link)}
+:focus-visible{outline:2px solid var(--link);outline-offset:2px}
+header,main,footer{max-width:1100px;margin:0 auto;padding:0 16px}
+header{display:flex;flex-wrap:wrap;gap:10px 24px;align-items:center;padding-top:14px;padding-bottom:14px}
+header b{font-size:17px}
+nav{display:flex;gap:18px}
+nav a{text-decoration:none;color:var(--muted)}
+nav a.on{color:var(--fg);font-weight:600}
+.search{position:relative;margin-left:auto;flex:1 1 220px;max-width:340px}
+.search input{width:100%;padding:7px 10px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--fg);font:inherit}
+.search ul{position:absolute;z-index:5;left:0;right:0;margin:4px 0 0;padding:4px 0;list-style:none;background:var(--panel);
+  border:1px solid var(--line);border-radius:6px;max-height:60vh;overflow:auto}
+.search li a{display:block;padding:5px 10px;text-decoration:none;color:var(--fg)}
+.search li a:hover,.search li a:focus{background:var(--grid)}
+h1{font-size:clamp(26px,5vw,34px);line-height:1.15;font-weight:700;letter-spacing:-.02em;margin:20px 0 12px;max-width:22em}
+h2{font-size:22px;line-height:1.25;font-weight:650;letter-spacing:-.01em;margin:48px 0 10px}
+p,li{max-width:72ch}
+.lede{font-size:17px;margin:0 0 28px}
+.sub,.muted{color:var(--muted)}
+.tag{display:inline-block;font-size:13px;font-weight:500;padding:1px 8px;border:1px solid var(--line);border-radius:10px;color:var(--muted);vertical-align:middle;letter-spacing:0}
+.meta{display:flex;flex-wrap:wrap;gap:4px 18px;color:var(--muted);margin:0}
+.strip{position:relative;height:20px;margin:0 6px;min-width:140px}
+.strip::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:1px solid var(--line)}
+.strip i{position:absolute;top:50%}
+.strip .rng{left:40%;width:20%;height:12px;margin-top:-6px;border-radius:3px;background:color-mix(in srgb,var(--s2) 35%,transparent)}
+.strip .pt{width:2px;height:18px;margin:-9px 0 0 -1px;background:var(--s2)}
+.strip .dot{width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:var(--s1);box-shadow:0 0 0 2px var(--bg)}
+.strip .dot.lo{clip-path:polygon(100% 0,0 50%,100% 100%)}
+.strip .dot.hi{clip-path:polygon(0 0,100% 50%,0 100%)}
+.strip.big{height:28px;margin-bottom:24px}
+.strip.big .rng{height:20px;margin-top:-10px}
+.strip.big .pt{height:30px;margin-top:-15px}
+.strip.big .dot{width:14px;height:14px;margin:-7px 0 0 -7px}
+.strip span{position:absolute;top:100%;margin-top:4px;transform:translateX(-50%);font-size:13px;color:var(--muted);white-space:nowrap}
+.ex{display:grid;grid-template-columns:15em minmax(200px,1fr) 15em;gap:18px 28px;align-items:center;margin:0 0 8px}
+.ex>p{grid-column:1/-1;margin:0}
+.ex .what{font-size:15px}
+.key{display:flex;flex-wrap:wrap;gap:6px 20px;font-size:13px;color:var(--muted);margin:6px 0 0}
+.key i{display:inline-block;vertical-align:middle;margin-right:6px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:20px 28px;margin:18px 0}
+.tile{border-top:1px solid var(--line);padding-top:10px}
+.tile .v{font-size:28px;font-weight:650;letter-spacing:-.01em;line-height:1.2}
+.tile .k{font-size:13px;color:var(--muted)}
+.bar{display:flex;gap:2px;height:8px;margin:8px 0 6px}
+.bar i{background:var(--s1);border-radius:2px}
+.bar i.in{background:color-mix(in srgb,var(--s2) 35%,transparent)}
+ol.steps{padding-left:1.4em}
+ol.steps li{margin:0 0 8px}
+.ok,.no{font-weight:600;white-space:nowrap}
+.ok{color:var(--good)} .no{color:var(--bad)}
+.ok::before{content:"✓ "} .no::before{content:"✗ "}
+.wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th{color:var(--muted);font-weight:500;font-size:13px;white-space:normal;vertical-align:bottom}
+th:first-child,td:first-child,td.l,th.l{text-align:left}
+td.name{white-space:normal;min-width:180px}
+td.s{min-width:160px}
+tr.sel td{font-weight:600}
+.chart{position:relative;margin:4px 0}
+.chart svg{display:block;width:100%;height:auto}
+.chart text{fill:var(--muted);font-size:11px}
+.tip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:6px 9px;
+  font-size:13px;box-shadow:0 2px 8px rgba(0,0,0,.12);display:none;white-space:nowrap;z-index:3}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--muted);margin:2px 0 6px}
+.legend i{display:inline-block;vertical-align:middle;margin-right:6px}
+details{margin-top:10px} summary{cursor:pointer;color:var(--muted);font-size:13px}
+.controls{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin:14px 0}
+select{padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--fg);font:inherit}
+.next{margin:22px 0 8px;max-width:640px}
+.next .v{font-size:34px;font-weight:700;letter-spacing:-.02em;line-height:1.2;margin:2px 0 10px}
+.next .v small{font-size:15px;font-weight:400;letter-spacing:0;color:var(--muted)}
+.next>div{margin:3px 0}
+footer{margin-top:40px;padding-top:12px;padding-bottom:24px;font-size:13px;color:var(--muted)}
+.err{color:var(--bad)}
+@media (max-width:720px){.ex{grid-template-columns:1fr;gap:6px}.ex .what{margin-bottom:14px}}
+</style>
+</head>
+<body>
+<header>
+  <b>toobig</b>
+  <nav><a href="#/" data-r="">Overview</a><a href="#/surprises" data-r="surprises">Outside the range</a></nav>
+  <div class="search"><input id="q" type="search" placeholder="Ticker, company or CIK" autocomplete="off" aria-label="Find a company"><ul id="hits" hidden></ul></div>
+</header>
+<main id="app"><p class="muted">Loading…</p></main>
+<footer id="foot"></footer>
+<script>
+const app = document.getElementById("app");
+const cache = {};
+const get = p => cache[p] ??= fetch(p).then(r => { if (!r.ok) throw new Error(`${p}: HTTP ${r.status}`); return r.json(); });
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => `&#${c.charCodeAt(0)};`);
+const money = v => { const a = Math.abs(v), s = v < 0 ? "-$" : "$";
+  return a >= 1e9 ? s + (a / 1e9).toFixed(a >= 1e11 ? 0 : a >= 1e10 ? 1 : 2) + "B" : a >= 1e6 ? s + (a / 1e6).toFixed(a >= 1e8 ? 0 : a >= 1e7 ? 1 : 2) + "M"
+    : a >= 1e3 ? s + (a / 1e3).toFixed(0) + "K" : s + a.toFixed(0); };
+const pct = (v, d = 1) => v == null ? "–" : (v * 100).toFixed(d) + "%";
+const band = (lo, hi) => `${money(lo)}–${money(hi)}`;
+const day = d => new Date(d).toLocaleDateString("en-US", {month: "short", day: "numeric", year: "numeric", timeZone: "UTC"});
+const filing = (cik, accn) => `https://www.sec.gov/Archives/edgar/data/${cik}/${accn.replace(/-/g, "")}/`;
+const edgar = cik => `https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=${cik}&type=10-Q`;
+const pass = (ok, text) => `<span class="${ok ? "ok" : "no"}">${ok ? "Pass" : "Fail"}</span> <span class="muted">${text}</span>`;
+const SIZES = [[50e6, "<$50M"], [500e6, "$50M–500M"], [5e9, "$500M–5B"], [Infinity, "≥$5B"]];
+const sizeOf = ttm => SIZES.findIndex(([cap]) => ttm < cap);
+const MODELS = {seasonal_naive: "y(t−4): same quarter last year", foster: "y(t−4) · y(t−1)/y(t−5): last year's quarter grown at last quarter's YoY rate",
+  foster_damped: "foster with half the growth", yoy2: "y(t−4) grown at the mean YoY rate of the last two quarters",
+  ttm_damped: "y(t−4) grown at half the trailing-twelve-month growth", median: "median of seasonal naive, foster damped, yoy2, ttm damped"};
+const MISSING = {no_revenue_tag: "No revenue tag in XBRL (mostly banks and insurers)", stale_revenue: "Files 10-Qs, but its newest revenue quarter is over 200 days old",
+  next_short_history: "Fewer than four quarters of revenue", next_nonpositive_base: "Year-ago quarter's revenue is zero or negative",
+  no_revenue_quarters: "Revenue tagged, but no quarter could be derived", commodity_pool: "Commodity pool: revenue is futures trading gains",
+  next_scale_break: "Latest quarter is about 1,000× off the year-ago one: likely filed in the wrong unit"};
+const STATUS = {hit: "inside the range", miss: "outside the range", pending: "waiting for the 10-Q", void: "void"};
+const tips = {};
+const chartW = () => Math.max(360, Math.min(900, app.clientWidth - 32));  // viewBox in CSS px, so 11px labels stay 11px on phones
+
+// The 80% range fills the middle fifth; two range-widths of room each side, past that the dot pins to the edge as an arrow.
+function strip(lo, hi, point, actual, big) {
+  const w = hi - lo || Math.abs(hi) * 0.01 || 1, at = v => Math.max(0, Math.min(100, (v - lo + 2 * w) / (5 * w) * 100));
+  const side = actual == null ? "" : actual < lo - 2 * w ? " lo" : actual > hi + 2 * w ? " hi" : "";
+  const say = `80% range ${band(lo, hi)}, best guess ${money(point)}` +
+    (actual == null ? "" : `, reported ${money(actual)}, ${actual > hi ? "above" : actual < lo ? "below" : "inside"} the range`);
+  return `<div class="strip${big ? " big" : ""}" role="img" aria-label="${say}" title="${say}"><i class="rng"></i><i class="pt" style="left:${at(point)}%"></i>` +
+    (actual == null ? "" : `<i class="dot${side}" style="left:${at(actual)}%"></i>`) +
+    (big ? `<span style="left:40%">${money(lo)}</span><span style="left:60%">${money(hi)}</span>` : "") + "</div>";
+}
+const KEY = `<p class="key"><span><i style="width:22px;height:12px;border-radius:3px;background:color-mix(in srgb,var(--s2) 35%,transparent)"></i>80% range</span>
+  <span><i style="width:2px;height:16px;background:var(--s2)"></i>best guess</span><span><i style="width:10px;height:10px;border-radius:50%;background:var(--s1)"></i>reported</span>
+  <span><i style="width:10px;height:10px;background:var(--s1);clip-path:polygon(0 0,100% 50%,0 100%)"></i>reported, far off the scale</span></p>`;
+
+function ticks(a, b, n = 5) {
+  const raw = (b - a) / n, mag = 10 ** Math.floor(Math.log10(raw)), step = [1, 2, 2.5, 5, 10].map(k => k * mag).find(s => s >= raw);
+  const out = [];
+  for (let v = Math.ceil(a / step) * step; v <= b + step * 1e-9; v += step) out.push(+v.toPrecision(12));
+  return out;
+}
+
+// Shared chart frame: grid, y labels, a crosshair and a hit area; hover looks up the nearest x in tips[id].
+function frame(id, W, H, m, y, yt, fmt, body, xs, labels) {
+  const grid = yt.map(v => `<line x1="${m.l}" x2="${W - m.r}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid)"/>` +
+    `<text x="${m.l - 6}" y="${y(v) + 4}" text-anchor="end">${fmt(v)}</text>`).join("");
+  const xl = labels.map(([x, t]) => `<text x="${x}" y="${H - 8}" text-anchor="middle">${t}</text>`).join("");
+  tips[id].xs = xs;
+  return `<svg id="${id}" viewBox="0 0 ${W} ${H}" role="img">${grid}${xl}${body}
+    <line class="cross" y1="${m.t}" y2="${H - m.b}" stroke="var(--muted)" stroke-dasharray="3 3" visibility="hidden"/>
+    <rect x="${m.l}" y="${m.t}" width="${W - m.l - m.r}" height="${H - m.t - m.b}" fill="transparent"/></svg><div class="tip"></div>`;
+}
+
+function hover(svg) {
+  const t = tips[svg.id], tip = svg.nextElementSibling, cross = svg.querySelector(".cross"), W = svg.viewBox.baseVal.width;
+  svg.addEventListener("mousemove", e => {
+    const r = svg.getBoundingClientRect(), x = (e.clientX - r.left) * W / r.width;
+    let i = 0;
+    t.xs.forEach((v, j) => { if (Math.abs(v - x) < Math.abs(t.xs[i] - x)) i = j; });
+    cross.setAttribute("x1", t.xs[i]); cross.setAttribute("x2", t.xs[i]); cross.setAttribute("visibility", "visible");
+    tip.innerHTML = t.html(i); tip.style.display = "block";
+    const px = t.xs[i] * r.width / W, box = svg.parentElement.getBoundingClientRect();
+    tip.style.left = Math.min(px + 14, box.width - tip.offsetWidth - 4) + "px";
+    tip.style.top = (e.clientY - box.top + 12) + "px";
+  });
+  svg.addEventListener("mouseleave", () => { tip.style.display = "none"; cross.setAttribute("visibility", "hidden"); });
+}
+
+function coverageChart(rows) {
+  const W = chartW(), H = 280, m = {l: 46, r: 14, t: 22, b: 30};
+  const cov = rows.map(r => r.coverage), y0 = Math.floor(Math.min(0.7, ...cov) * 20) / 20, y1 = Math.ceil(Math.max(0.9, ...cov) * 20) / 20;
+  const x = i => m.l + (W - m.l - m.r) * (i + 0.5) / rows.length, y = v => m.t + (H - m.t - m.b) * (1 - (v - y0) / (y1 - y0));
+  const split = rows.findIndex(r => r.holdout), sx = (x(split - 1) + x(split)) / 2;
+  const every = Math.ceil(rows.length / (W / 64) / 4) * 4;
+  const labels = rows.map((r, i) => [x(i), r.key]).filter(([, k], i) => k.endsWith("Q1") && (+k.slice(0, 4)) % (every / 4) === 0).map(([xx, k]) => [xx, k.slice(0, 4)]);
+  const body = `<rect x="${m.l}" width="${W - m.l - m.r}" y="${y(0.82)}" height="${y(0.78) - y(0.82)}" fill="var(--zone)"/>
+    <text x="${W - m.r - 4}" y="${y(0.82) - 4}" text-anchor="end">target 78–82%</text>
+    ${split > 0 ? `<line x1="${sx}" x2="${sx}" y1="${m.t - 10}" y2="${H - m.b}" stroke="var(--muted)" stroke-dasharray="4 3"/>
+    <text x="${sx - 6}" y="${m.t - 2}" text-anchor="end">formula picked here</text><text x="${sx + 6}" y="${m.t - 2}">later quarters</text>` : ""}
+    <path d="${rows.map((r, i) => `${i ? "L" : "M"}${x(i)},${y(r.coverage)}`).join("")}" fill="none" stroke="var(--s1)" stroke-width="2" stroke-linejoin="round"/>
+    ${rows.map((r, i) => `<circle cx="${x(i)}" cy="${y(r.coverage)}" r="4" fill="${r.complete ? "var(--s1)" : "var(--bg)"}" stroke="${r.complete ? "var(--bg)" : "var(--s1)"}" stroke-width="2"/>`).join("")}`;
+  tips.cov = {html: i => { const r = rows[i];
+    return `<b>${r.key}</b>, ${r.holdout ? "later quarter" : "formula picked on this"}${r.complete ? "" : ", still reporting"}<br>Inside range: ${pct(r.coverage)} of ${r.n.toLocaleString()}<br>` +
+      `Below: ${pct(r.below)}, above: ${pct(r.above)}<br>Typical range width: ${width(r)}`; }};
+  return frame("cov", W, H, m, y, ticks(y0, y1, 6), v => pct(v, 0), body, rows.map((_, i) => x(i)), labels);
+}
+
+const width = r => r.median_log_width == null ? "—" : "±" + pct(Math.expm1(r.median_log_width / 2));
+const ws = s => s.winkler_log == null ? "—" : s.winkler_log.toFixed(3);
+
+function table(cols, rows, sel) {
+  return `<div class="wrap"><table><thead><tr>${cols.map(([h, , cls]) => `<th class="${cls || ""}">${h}</th>`).join("")}</tr></thead><tbody>` +
+    rows.map(r => `<tr class="${sel && sel(r) ? "sel" : ""}">${cols.map(([, f, cls]) => `<td class="${cls || ""}">${f(r)}</td>`).join("")}</tr>`).join("") +
+    "</tbody></table></div>";
+}
+
+const GROUP = {"zero risk": "Had a zero or negative quarter", other: "All other companies", low: "Steadiest third", mid: "Middle third", high: "Most volatile third"};
+const scoreCols = [["Group", r => esc(GROUP[r.key] || r.key)], ["Forecasts", r => r.n.toLocaleString()], ["Inside range", r => pct(r.coverage)],
+  ["Below", r => pct(r.below)], ["Above", r => pct(r.above)], ["Range score", ws],
+  ["Typical range width", width], ["Typical miss", r => pct(r.mdape)]];
+
+const byZ = (a, b) => Math.abs(b.z ?? Infinity) - Math.abs(a.z ?? Infinity);  // no score (zero or negative revenue) sorts first
+const beyond = r => r.actual > r.hi ? `${pct(r.actual / r.hi - 1)} above` : `${r.lo > 0 ? pct(1 - r.actual / r.lo) : money(r.lo - r.actual)} below`;
+const missCols = [["Company", r => `<a href="#/c/${r.cik}">${esc(r.ticker || "CIK " + r.cik)}</a> <span class="muted">${esc(r.name)}</span>`, "name"],
+  ["Where it landed", r => strip(r.lo, r.hi, r.point, r.actual), "s"], ["Reported", r => money(r.actual)], ["Best guess", r => money(r.point)],
+  ["80% range", r => band(r.lo, r.hi)], ["Beyond the range", beyond]];
+
+function example(a) {
+  const last = a?.history.findLast(r => r.lo != null), n = a?.next;
+  if (!last || !n) return "";
+  const lk = a.ledger.find(e => e.target_end === last.end && e.actual != null), p = lk || last, led = a.ledger.find(e => e.target_end === n.target_end);
+  const where = p.actual > p.hi ? "above" : p.actual < p.lo ? "below" : "inside";
+  return `<div class="ex"><p>Take <a href="#/c/${a.cik}">${esc(a.name)}</a>.</p>
+    <div>Quarter ended ${day(last.end)}<br><span class="muted">${lk ? `locked ${day(lk.created)}` : "rebuilt from earlier filings"}</span></div>
+    ${strip(p.lo, p.hi, p.point, p.actual, true)}<div class="what">Reported ${money(p.actual)}, ${where} the range.</div>
+    <div>Quarter ${n.target_end < a.data_date ? "ended" : "ending"} ${day(n.target_end)}<br><span class="muted">${led ? `locked ${day(led.created)}, entry #${led.seq}` : "forecast today"}</span></div>
+    ${strip(n.lo, n.hi, n.point, null, true)}<div class="what">Best guess ${money(n.point)}. Not reported yet.</div></div>${KEY}`;
+}
+
+async function scorecard() {
+  const [c, rows, apple] = await Promise.all([get("scorecard.json"), get("surprises.json"), get("c/320193.json").catch(() => null)]);
+  const h = c.holdout, [lo, hi] = c.targets.coverage, inT = r => r.coverage >= lo && r.coverage <= hi, from = c.split.slice(0, 4);
+  const hq = c.by_quarter.filter(r => r.holdout && r.complete), R = c.recent, u = c.universe, L = c.ledger;
+  const wk = c.surprise_weeks.find(w => w.outside), scored = Object.values(L.methods).reduce((s, x) => s + x.gold.n + x.silver.n, 0);
+  return `<h1>Next quarter's revenue, forecast for ${u.observed.toLocaleString()} US companies</h1>
+  <p class="lede">Each gets a best guess for next quarter's revenue and an 80% range that should catch the reported number about four times in five.
+  Every forecast is locked in a public, timestamped ledger before the company reports, so it can't be quietly changed afterwards.</p>
+  ${example(apple)}
+  ${wk ? `<h2>Furthest outside the range, week of ${day(wk.week)}</h2>
+  <p class="sub">${wk.outside} of the ${wk.n} companies that reported that week landed outside their range; about one in five should.
+  These ranges are rebuilt from each company's earlier filings.</p>
+  ${table(missCols, rows.filter(r => r.week === wk.week).sort(byZ).slice(0, 5))}
+  <p><a href="#/surprises/${wk.week}">See all ${wk.outside} for that week</a></p>` : ""}
+  <h2>Track record</h2>
+  <p class="sub">Rebuilt from past filings: ${h.n.toLocaleString()} forecasts for quarters from ${from} on, each made only from filings public at the time.</p>
+  <div class="tiles">
+    <div class="tile"><div class="v">${pct(h.coverage)}</div><div class="k">landed inside the 80% range</div>
+      <div class="bar" role="img" aria-label="${pct(h.below)} below, ${pct(h.coverage)} inside, ${pct(h.above)} above"><i style="width:${h.below * 100}%"></i><i class="in" style="width:${h.coverage * 100}%"></i><i style="width:${h.above * 100}%"></i></div>
+      <div class="k">${pct(h.below)} below, ${pct(h.above)} above. Last ${R.quarters.length} quarters: ${pct(R.coverage)}.</div></div>
+    <div class="tile"><div class="v">${pct(h.mdape)}</div><div class="k">typical miss</div><div class="k">${pct(c.holdout_sn.mdape)} if you repeat the same quarter last year</div></div>
+    <div class="tile"><div class="v">${pct(c.width_ratio_vs_sn, 0)}</div><div class="k">range width</div><div class="k">of the range the same-quarter-last-year method needs for 80%</div></div>
+    <div class="tile"><div class="v">${u.observed.toLocaleString()}</div><div class="k">companies with a forecast</div><div class="k">of ${u.expected.toLocaleString()} recent 10-Q filers (${pct(u.observed / u.expected, 0)})</div></div>
+  </div>
+  <p class="sub">These numbers are rebuilt, not live. The best-guess formula was picked on quarters before ${from} and tested on the rest.
+  The range settings were tuned with those later quarters in view, which flatters the ${pct(h.coverage)}; the last ${R.quarters.length} quarters came in at ${pct(R.coverage)}, so expect live results nearer that.
+  ${scored ? `${scored.toLocaleString()} locked forecasts have been scored so far.` : "No locked forecast has been scored yet."}</p>
+  <h2>How it works</h2>
+  <ol class="steps">
+    <li><b>Forecast.</b> After a company files a 10-Q, read its revenue from the SEC's XBRL data and project next quarter: ${esc((MODELS[c.model] || c.model).split(": ").at(-1))}.
+      The range comes from how far off past forecasts were, for this company and for similar ones.</li>
+    <li><b>Lock.</b> Append the forecast to a ledger where each line carries the hash of the line before it, and timestamp the ledger on Bitcoin. Changing or deleting any past forecast breaks every later line.</li>
+    <li><b>Score.</b> When the next 10-Q arrives, check whether the reported revenue landed inside the range.</li>
+  </ol>
+  <h2>Targets</h2>
+  <p class="sub">What the forecasts must achieve, rechecked on every build.</p>
+  <ul>
+    <li>${pass(inT(h), `${pct(h.coverage)} inside the range on rebuilt forecasts from ${from} on; target ${pct(lo, 0)}–${pct(hi, 0)}`)}</li>
+    <li>${pass(hq.every(inT), `${hq.filter(inT).length} of ${hq.length} complete quarters from ${from} on inside ${pct(lo, 0)}–${pct(hi, 0)}`)}</li>
+    <li>${pass(inT(R), `Last ${R.quarters.length} complete quarters (${R.quarters[0]} to ${R.quarters.at(-1)}): ${pct(R.coverage)} inside; live results should look like this`)}</li>
+    <li>${pass(c.by_size.every(inT), `${c.by_size.filter(inT).length} of ${c.by_size.length} company-size groups inside ${pct(lo, 0)}–${pct(hi, 0)}`)}</li>
+    <li>${pass(c.mdape_gain_vs_sn >= c.targets.mdape_gain_vs_sn, `Typical miss ${pct(c.mdape_gain_vs_sn)} smaller than repeating last year's quarter; target at least ${pct(c.targets.mdape_gain_vs_sn, 0)}`)}</li>
+    <li>${pass(c.build_seconds <= c.targets.build_seconds, `Full rebuild in ${Math.round(c.build_seconds)} seconds; target under ${c.targets.build_seconds}`)}</li>
+  </ul>
+  <h2>Inside the range, quarter by quarter</h2>
+  <p class="sub">Share of companies whose reported revenue landed inside the 80% range, by the quarter forecast. The grey band is the target; hollow points are quarters still being reported.</p>
+  <div class="chart">${coverageChart(c.by_quarter)}</div>
+  <details><summary>Table view</summary>${table(scoreCols, c.by_quarter)}</details>
+  <p class="sub">Typical miss: median absolute percentage error. Typical range width: half the median range, as ± from its middle.
+  Range score: the interval score on log revenue, which adds the range's width to a penalty for each miss; lower is better.</p>
+  <h2>By company size <span class="muted">(revenue in the last 12 months)</span></h2>${table(scoreCols, c.by_size)}
+  <h2>By company volatility <span class="muted">(how big the company's usual miss is, in thirds)</span></h2>${table(scoreCols, c.by_scale)}
+  <h2>Companies that have reported a zero quarter</h2>
+  <p class="sub">A company that reported a zero or negative quarter in the last two years is calibrated as its own group. Where such quarters are common enough, the range opens down to $0: ${h.open_floor.toLocaleString()} rebuilt ranges and ${c.live_open_floor.toLocaleString()} live ones.</p>
+  ${table(scoreCols, c.by_zero_risk)}
+  <h2>Best-guess formulas</h2>
+  <p class="sub">Picked once, by typical miss on forecasts made before ${day(c.split)}. The one in use is bold.</p>
+  ${table([["Formula", r => esc(r.model), "l"], ["How it works", r => esc(MODELS[r.model] || ""), "l"], [`Typical miss, before ${from}`, r => pct(r.mdape_selection, 2)],
+    [`Typical miss, ${from} on`, r => pct(r.mdape_holdout, 2)]], c.models, r => r.model === c.model)}
+  <h2>Who is covered</h2>
+  <p class="sub">Expected: US companies (not IFRS filers) that filed a 10-Q in the last 200 days. ${u.observed.toLocaleString()} of ${u.expected.toLocaleString()} have a forecast. The rest, and why:</p>
+  ${table([["Reason", ([k]) => esc(MISSING[k] || k), "l"], ["Companies", ([, n]) => n.toLocaleString()]], Object.entries(u.missing))}
+  <h2>Ledger</h2>
+  <p class="sub">Each forecast is a line that carries the hash of the line before it, so no past forecast can be edited or dropped without breaking every later line.
+  The ledger is timestamped on Bitcoin. The <a href="https://github.com/j-poc/toobig">ledger, its proofs and a checker</a> are public.</p>
+  <ul>
+    <li>${L.intact ? '<span class="ok">Chain intact</span>' : '<span class="no">Chain broken</span>'}: ${L.entries.toLocaleString()} forecasts, ${L.added.toLocaleString()} added in this build. Latest hash ${L.head.slice(0, 16)}…</li>
+    <li>${Object.entries(L.status).map(([k, n]) => `${n.toLocaleString()} ${STATUS[k] || k}`).join(", ")}</li>
+    ${Object.entries(L.methods).map(([m, x]) => `<li>Method ${esc(m)}: ${x.n.toLocaleString()} forecasts. Scored so far: ${x.gold.n} gold${x.gold.n ? ` (${pct(x.gold.coverage)} inside)` : ""}, ${x.silver.n} silver${x.silver.n ? ` (${pct(x.silver.coverage)} inside)` : ""}.</li>`).join("")}
+  </ul>
+  <p class="sub">Gold: locked before the quarter ended. Silver: locked after the quarter ended but before the 10-Q was filed.</p>`;
+}
+
+async function surprises(week, size) {
+  const [c, rows] = await Promise.all([get("scorecard.json"), get("surprises.json")]);
+  const weeks = c.surprise_weeks;
+  week ||= (weeks.find(w => w.outside) || weeks[0] || {}).week;
+  const s = size === "" || size == null ? -1 : +size;
+  const pick = rows.filter(r => (week === "all" || r.week === week) && (s < 0 || sizeOf(r.ttm) === s)).sort(byZ);
+  const w = weeks.find(x => x.week === week);
+  return `<h1>Reported outside the range</h1>
+  <p class="sub">Companies whose reported revenue landed outside the 80% range. One in five should, by design; what matters is how far.
+  These ranges are rebuilt, each only from filings up to the company's previous 10-Q.
+  Surprise score: the miss measured in the company's usual forecast error, so 2 means twice its usual miss.</p>
+  <div class="controls">
+    <label>Week filed <select id="wk">${weeks.map(x => `<option value="${x.week}" ${x.week === week ? "selected" : ""}>Week of ${day(x.week)}: ${x.outside} of ${x.n} outside</option>`).join("")}
+      <option value="all" ${week === "all" ? "selected" : ""}>All of the last 91 days</option></select></label>
+    <label>Size <select id="sz"><option value="">All sizes</option>${SIZES.map(([, l], i) => `<option value="${i}" ${i === s ? "selected" : ""}>${l}</option>`).join("")}</select></label>
+    <span class="muted">${pick.length} companies${w && s < 0 ? `, ${pct(w.outside / w.n)} of the week's reports` : ""}</span>
+  </div>
+  ${KEY}
+  ${table([...missCols, ["Revenue last 12 months", r => money(r.ttm)], ["Surprise score", r => r.z == null ? "—" : r.z.toFixed(2)],
+    ["Filed", r => `<a href="${filing(r.cik, r.accn)}" target="_blank" rel="noopener">${r.filed}</a>`]], pick)}`;
+}
+
+function companyChart(c) {
+  const W = chartW(), H = 300, m = {l: 64, r: 70, t: 14, b: 30}, by = new Map();
+  for (const q of c.series) by.set(q.end, {end: q.end, actual: q.val});
+  for (const r of c.history) if (r.lo != null) by.set(r.end, {...by.get(r.end), end: r.end, actual: r.actual, point: r.point, lo: r.lo, hi: r.hi});
+  if (c.next) by.set(c.next.target_end, {end: c.next.target_end, point: c.next.point, lo: c.next.lo, hi: c.next.hi, next: true});
+  const pts = [...by.values()].sort((a, b) => a.end < b.end ? -1 : 1), t = d => Date.parse(d);
+  const vals = pts.flatMap(p => [p.actual, p.lo, p.hi]).filter(v => v != null);
+  const yt = ticks(Math.min(...vals), Math.max(...vals), 5), y0 = Math.min(yt[0], Math.min(...vals)), y1 = Math.max(yt.at(-1), Math.max(...vals));
+  const t0 = t(pts[0].end) - 40e8, t1 = t(pts.at(-1).end) + 40e8;
+  const x = d => m.l + (W - m.l - m.r) * (t(d) - t0) / (t1 - t0), y = v => m.t + (H - m.t - m.b) * (1 - (v - y0) / (y1 - y0));
+  const act = pts.filter(p => p.actual != null), out = p => p.lo != null && p.actual != null && (p.actual < p.lo || p.actual > p.hi);
+  const years = [...new Set(pts.map(p => p.end.slice(0, 4)))], step = Math.ceil(years.length / (W / 90));
+  const labels = years.filter((_, i) => i % step === 0).map(yr => [x(`${yr}-07-01`), yr]).filter(([xx]) => xx > m.l && xx < W - m.r);
+  const last = act.at(-1), nx = pts.find(p => p.next);
+  const body = pts.filter(p => p.lo != null).map(p => `<rect x="${x(p.end) - (p.next ? 5 : 3.5)}" width="${p.next ? 10 : 7}" y="${y(p.hi)}" height="${Math.max(y(p.lo) - y(p.hi), 2)}" rx="3" fill="var(--s2)" fill-opacity="${p.next ? 0.45 : 0.25}"/>`).join("") +
+    `<path d="${act.map((p, i) => `${i ? "L" : "M"}${x(p.end)},${y(p.actual)}`).join("")}" fill="none" stroke="var(--s1)" stroke-width="2" stroke-linejoin="round"/>` +
+    (nx && last ? `<line x1="${x(last.end)}" y1="${y(last.actual)}" x2="${x(nx.end)}" y2="${y(nx.point)}" stroke="var(--s2)" stroke-width="2" stroke-dasharray="4 3"/>` : "") +
+    pts.filter(p => p.point != null).map(p => `<circle cx="${x(p.end)}" cy="${y(p.point)}" r="${p.next ? 5 : 3.5}" fill="var(--s2)" stroke="var(--bg)" stroke-width="1.5"/>`).join("") +
+    act.map(p => `<circle cx="${x(p.end)}" cy="${y(p.actual)}" r="4" fill="var(--s1)" stroke="${out(p) ? "var(--fg)" : "var(--bg)"}" stroke-width="2"/>`).join("") +
+    (nx ? `<text x="${x(nx.end) + 9}" y="${y(nx.point) + 4}" style="fill:var(--fg)">next ${money(nx.point)}</text>` : "");
+  tips.co = {html: i => { const p = pts[i];
+    return `<b>Quarter ending ${p.end}</b>${p.next ? ", next, locked" : ""}<br>` + (p.actual != null ? `Reported: ${money(p.actual)}<br>` : "") +
+      (p.point != null ? `Best guess: ${money(p.point)}<br>80% range: ${band(p.lo, p.hi)}` : "") +
+      (out(p) ? `<br><b>Outside the range, ${p.actual > p.hi ? "above" : "below"}</b>` : p.lo != null && p.actual != null ? "<br>Inside the range" : ""); }};
+  return frame("co", W, H, m, y, yt, money, body, pts.map(p => x(p.end)), labels);
+}
+
+async function company(cik) {
+  const c = await get(`c/${cik}.json`), led = c.ledger, n = c.next || led.findLast(e => e.status === "pending"), mine = n && led.find(e => e.target_end === n.target_end);
+  const why = Object.keys(c.skips).filter(k => k.startsWith("next_")).map(k => esc(MISSING[k] || k)).join("; ") || "Newest revenue quarter is over 200 days old";
+  const status = e => ({hit: '<span class="ok">Inside</span>', miss: '<span class="no">Outside</span>', pending: "Waiting for the 10-Q", void: "Void: reported before it was locked"})[e.status];
+  const hist = [...c.history].reverse();
+  return `<h1>${esc(c.name)} ${c.ticker ? `<span class="tag">${esc(c.ticker)}</span>` : ""}</h1>
+  <p class="meta">${c.exchange ? `<span>${esc(c.exchange)}</span>` : ""}<span>CIK ${c.cik}</span><a href="${edgar(c.cik)}" target="_blank" rel="noopener">EDGAR filings</a>
+    <a href="c/${c.cik}.json">Raw data (JSON)</a><span>Data through ${day(c.data_date)}</span></p>
+  ${n ? `<div class="next"><div>Next quarter, ${n.target_end < c.data_date ? "ended" : "ending"} about ${day(n.target_end)}</div>
+    <div class="v">${money(n.point)} <small>best guess</small></div>${strip(n.lo, n.hi, n.point, null, true)}
+    <div>80% range ${band(n.lo, n.hi)} <span class="muted">from filings through ${day(n.asof)} (latest quarter ended ${day(n.last_end)})</span></div>
+    ${mine ? `<div class="muted">Locked on ${day(mine.created)} as ledger entry #${mine.seq}, hash ${mine.hash.slice(0, 12)}…</div>` : ""}
+    ${c.next ? "" : `<div class="muted">Not re-forecast from today's data: ${why}. The ledgered forecast stands and will be scored.</div>`}</div>`
+    : `<div class="next"><b>No live forecast.</b> <span class="muted">${why}.</span></div>`}
+  <h2>Revenue and forecasts</h2>
+  <p class="sub">Past ranges are rebuilt from the filings available at the time; only ledger entries were locked in advance.</p>
+  <div class="legend"><span><i style="width:16px;height:2px;background:var(--s1)"></i>Reported revenue</span>
+    <span><i style="width:8px;height:8px;border-radius:50%;background:var(--s2)"></i>Our best guess</span>
+    <span><i style="width:8px;height:14px;border-radius:3px;background:var(--s2);opacity:.3"></i>80% range</span>
+    <span><i style="width:9px;height:9px;border-radius:50%;background:var(--s1);box-shadow:0 0 0 2px var(--fg)"></i>Reported outside the range</span></div>
+  <div class="chart">${companyChart(c)}</div>
+  <details><summary>Table view: forecast history</summary>
+  ${table([["Quarter end", r => r.end], ["Forecast made", r => r.asof], ["Reported", r => money(r.actual)], ["Best guess", r => money(r.point)],
+    ["Same quarter last year", r => money(r.sn)], ["80% range", r => r.lo != null ? band(r.lo, r.hi) : '<span class="muted">no range</span>'],
+    ["Result", r => r.lo == null ? "" : r.actual > r.hi ? "above" : r.actual < r.lo ? "below" : "inside"], ["Surprise score", r => r.z != null ? r.z.toFixed(2) : ""],
+    ["How derived", r => esc(r.how)], ["Filed", r => `<a href="${filing(c.cik, r.accn)}" target="_blank" rel="noopener">${r.filed}</a>`]], hist)}</details>
+  <h2>Ledger entries</h2>
+  ${led.length ? table([["#", e => e.seq], ["Locked", e => e.created], ["Quarter end", e => e.target_end], ["Best guess", e => money(e.point)], ["80% range", e => band(e.lo, e.hi)],
+    ["Reported", e => e.actual != null ? money(e.actual) : ""], ["Result", status], ["Tier", e => e.tier || ""], ["Method", e => esc(e.method)], ["Hash", e => `${e.hash.slice(0, 12)}…`]], led)
+    : '<p class="muted">No forecast ledgered for this company yet.</p>'}
+  ${led.length ? '<p class="sub">Gold: locked before the quarter ended. Silver: locked after the quarter ended but before the 10-Q was filed.</p>' : ""}
+  <details><summary>Quarterly revenue as reported</summary>
+  ${table([["Quarter end", q => q.end], ["Start", q => q.start], ["Revenue", q => money(q.val)], ["How derived", q => esc(q.how)], ["XBRL concept", q => esc(q.concept), "l"],
+    ["Form", q => esc(q.form)], ["Filing", q => `<a href="${filing(c.cik, q.accn)}" target="_blank" rel="noopener">${esc(q.accn)}</a>`]], [...c.series].reverse())}</details>`;
+}
+
+async function route() {
+  const t0 = performance.now(), [page = "", a, b] = location.hash.slice(2).split("/");
+  let foot = "";
+  document.querySelectorAll("nav a").forEach(el => el.classList.toggle("on", el.dataset.r === page));
+  try {
+    app.innerHTML = page === "c" ? await company(+a) : page === "surprises" ? await surprises(a && decodeURIComponent(a), b) : await scorecard();
+    app.querySelectorAll(".chart svg").forEach(hover);
+    const wk = document.getElementById("wk"), sz = document.getElementById("sz");
+    if (wk) wk.onchange = sz.onchange = () => location.hash = `#/surprises/${wk.value}/${sz.value}`;
+    const c = await get("scorecard.json");
+    foot = `Data from SEC XBRL filings through ${day(c.data_date)}. Method ${c.method}, built ${day(c.built)}. Not investment advice. `;
+  } catch (e) { app.innerHTML = `<p class="err">Could not load this page: ${esc(e.message)}</p>`; }
+  const ms = Math.round(performance.now() - (document.body.dataset.ready ? t0 : 0));  // the first load counts from navigation start
+  document.body.dataset.ready = ms;
+  document.getElementById("foot").textContent = `${foot}Page ready in ${ms} ms.`;
+  window.scrollTo(0, 0);
+}
+
+const q = document.getElementById("q"), hits = document.getElementById("hits");
+q.addEventListener("input", async () => {
+  const s = q.value.trim().toUpperCase();
+  if (!s) return hits.hidden = true;
+  const all = await get("companies.json");
+  const rank = ([cik, t, name]) => String(cik) === s || t === s ? 0 : t.startsWith(s) ? 1 : name.toUpperCase().startsWith(s) ? 2 : name.toUpperCase().includes(s) ? 3 : 9;
+  const top = all.map(r => [rank(r), r]).filter(([k]) => k < 9).sort((a, b) => a[0] - b[0] || a[1][1].length - b[1][1].length).slice(0, 12);
+  hits.innerHTML = top.map(([, [cik, t, name, live]]) => `<li><a href="#/c/${cik}"><b>${esc(t || cik)}</b> ${esc(name)}${live ? "" : ' <span class="muted">(no live forecast)</span>'}</a></li>`).join("")
+    || '<li class="muted" style="padding:5px 10px">No match</li>';
+  hits.hidden = false;
+});
+q.addEventListener("keydown", e => { if (e.key === "Enter") hits.querySelector("a")?.click(); if (e.key === "Escape") hits.hidden = true; });
+hits.addEventListener("click", () => { hits.hidden = true; q.value = ""; });
+document.addEventListener("click", e => { if (!e.target.closest(".search")) hits.hidden = true; });
+addEventListener("hashchange", route);
+route();
+</script>
+</body>
+</html>
